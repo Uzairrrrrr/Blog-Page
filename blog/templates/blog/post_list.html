@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <title>Blog</title>
+    <style>
+      /* Additional CSS for the blog list layout */
+      body {
+        font-family: Arial, sans-serif; /* Ensure consistent font */
+        line-height: 1.6; /* Improved readability */
+        background-color: #f0f0f0; /* Light background color */
+      }
+
+      .post {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: #ffffff; /* White background */
+        padding: 1.5rem; /* Increase padding for better spacing */
+        margin-bottom: 0; /* Add some bottom margin */
+        border: 1px solid #dddddd; /* Add a solid border */
+        transition: box-shadow 0.3s ease;
+      }
+
+      .post:hover {
+        box-shadow: none; /* Remove box shadow on hover */
+      }
+
+      .post img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem; /* Adjust margin for image */
+      }
+
+      .post .title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0.75rem 0; /* Adjust title margin */
+      }
+
+      .post .author {
+        color: #666666; /* Light gray author text */
+        font-size: 1rem;
+        margin-bottom: 0.5rem; /* Small bottom margin for author */
+      }
+
+      .post p {
+        margin-bottom: 0; /* Remove default bottom margin for paragraphs */
+      }
+
+      /* Responsive grid layout */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 0; /* Gap between grid items */
+        padding: 0; /* Padding around the grid */
+      }
+
+      @media (min-width: 640px) {
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (min-width: 768px) {
+        .grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mx-auto px-4">
+      <h1 class="text-4xl font-bold my-4">Blog</h1>
+      <div class="grid">
+        {% for post in posts %}
+        <div class="post">
+          {% if post.image %}
+          <a href="{% url 'post_detail' post.slug %}">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" />
+          </a>
+          {% endif %}
+          <h2 class="title">
+            <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
+          </h2>
+          <p class="author">By {{ post.author }}</p>
+          <p>{{ post.content|truncatewords:30 }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>
