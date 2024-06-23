@@ -11,7 +11,7 @@
       body {
         font-family: Arial, sans-serif; /* Ensure consistent font */
         line-height: 1.6; /* Improved readability */
-        background-color: #f0f0f0; /* Light background color */
+        background-color: white; /* Light background color */
       }
 
       .post {
@@ -21,7 +21,7 @@
         background-color: #ffffff; /* White background */
         padding: 1.5rem; /* Increase padding for better spacing */
         margin-bottom: 0; /* Add some bottom margin */
-        border: 1px solid #dddddd; /* Add a solid border */
+        border: none; /* Add a solid border */
         transition: box-shadow 0.3s ease;
       }
 
@@ -50,6 +50,47 @@
 
       .post p {
         margin-bottom: 0; /* Remove default bottom margin for paragraphs */
+      }
+
+      /* Banner style for the latest post */
+      .latest-post {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: #ffffff;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border-radius: 0.5rem;
+        align-items: center;
+        justify-items: center;
+        /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+        /* transition: box-shadow 0.3s ease; */
+      }
+
+      .latest-post img {
+        max-width: 80%;
+        height: auto;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        object-fit: cover;
+      }
+
+      .latest-post .title {
+        font-size: 2rem;
+        font-weight: bold;
+        /* margin: 0.5rem 0; */
+        text-align: center;
+      }
+
+      .latest-post .author {
+        color: #666666;
+        font-size: 1.2rem;
+        text-align: center;
+      }
+      .latest-post .content {
+        color: #666666;
+        font-size: 1.2rem;
+        text-align: center;
       }
 
       /* Responsive grid layout */
@@ -82,8 +123,31 @@
   <body>
     <div class="container mx-auto px-4">
       <h1 class="text-4xl font-bold my-4">Blog</h1>
+
+      <!-- Latest Post Banner -->
+      {% if latest_post %}
+      <div class="latest-post">
+        {% if latest_post.image %}
+        <a href="{% url 'post_detail' latest_post.slug %}">
+          <img
+            src="{{ latest_post.image.url }}"
+            alt="{{ latest_post.title }}"
+          />
+        </a>
+        {% endif %}
+        <h2 class="title">
+          <a href="{% url 'post_detail' latest_post.slug %}"
+            >{{ latest_post.title }}</a
+          >
+        </h2>
+        <p class="author">By {{ latest_post.author }}</p>
+        <p class="content">{{ latest_post.content|truncatewords:50 }}</p>
+      </div>
+      {% endif %}
+
+      <!-- Other Posts Grid -->
       <div class="grid">
-        {% for post in posts %}
+        {% for post in other_posts %}
         <div class="post">
           {% if post.image %}
           <a href="{% url 'post_detail' post.slug %}">
